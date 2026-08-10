@@ -1,5 +1,5 @@
 /* MotoCare - UI Rendering Engine */
-import { Vehicles, MaintenanceLogs, FuelLogs, Stats, Presets } from './db.js';
+import { Vehicles, MaintenanceLogs, FuelLogs, Stats, Presets, AI } from './db.js';
 import { VEHICLE_TYPES } from './presets.js';
 
 export const UI = {
@@ -70,6 +70,15 @@ export const UI = {
         odoInput.value = vehicle.currentOdo;
         odoInput.disabled = false;
 
+        // Update Gemini status indicator dot
+        const statusDot = document.getElementById('gemini-status-dot');
+        if (statusDot) {
+            const hasKey = !!AI.getKey();
+            statusDot.style.backgroundColor = hasKey ? 'var(--color-success)' : 'var(--color-danger)';
+            statusDot.style.boxShadow = hasKey ? '0 0 8px var(--color-success-glow)' : '0 0 8px var(--color-danger-glow)';
+            statusDot.title = hasKey ? 'Đã cấu hình Gemini API Key' : 'Chưa cấu hình Gemini API Key';
+        }
+
         // Render health grid
         const healthStatus = Stats.getHealthStatus(vehicleId);
         healthGrid.innerHTML = '';
@@ -104,6 +113,7 @@ export const UI = {
                 <div class="card-title" title="${item.name}">${item.name}</div>
                 <div class="card-desc">${kmLabel}<br>${item.timeLabel}</div>
                 <span class="status-badge">${item.status === 'good' ? 'Tốt' : (item.status === 'warning' ? 'Theo dõi' : 'Cần thay')}</span>
+                ${item.hasAdjustment ? `<div class="heuristic-indicator" style="font-size: 0.65rem; color: var(--color-warning); margin-bottom: 8px; font-weight: 500; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;" title="${item.adjustmentReason}">⚠️ Tối ưu AI</div>` : ''}
                 <button class="btn btn-secondary btn-sm btn-quick-log" data-category="${item.key}">
                     Thay phụ tùng
                 </button>

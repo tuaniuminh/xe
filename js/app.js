@@ -1,5 +1,5 @@
 /* MotoCare - Main App Controller */
-import { Vehicles, MaintenanceLogs, FuelLogs, Presets, Stats, DataPortability } from './db.js';
+import { Vehicles, MaintenanceLogs, FuelLogs, Presets, Stats, DataPortability, AI } from './db.js';
 import { UI } from './ui.js';
 
 // Application State
@@ -44,6 +44,12 @@ const App = {
         UI.renderFuelTracker(vId);
         UI.renderHistory(vId, document.getElementById('filter-maint-category')?.value || 'all');
         UI.renderPresetsSettings(vId);
+
+        // Autofill Gemini API key if present in settings input
+        const geminiInput = document.getElementById('settings-gemini-key');
+        if (geminiInput && !geminiInput.value) {
+            geminiInput.value = AI.getKey();
+        }
     },
 
     // Single Page App View Routing
@@ -154,6 +160,68 @@ const App = {
 
         document.getElementById('btn-close-modal-preset')?.addEventListener('click', () => this.closeModal('preset'));
         document.getElementById('btn-cancel-preset')?.addEventListener('click', () => this.closeModal('preset'));
+
+        // AI Doctor Modal close triggers
+        document.getElementById('btn-close-modal-ai-doctor')?.addEventListener('click', () => this.closeModal('ai-doctor'));
+        document.getElementById('btn-close-ai-doctor')?.addEventListener('click', () => this.closeModal('ai-doctor'));
+
+        // Save Gemini API Key trigger
+        document.getElementById('btn-save-gemini-key')?.addEventListener('click', () => {
+            const keyInput = document.getElementById('settings-gemini-key');
+            if (keyInput) {
+                AI.saveKey(keyInput.value);
+                UI.showToast("Đã lưu khóa API Gemini thành công!", "success");
+                this.renderAll(); // updates status dot on Dashboard
+            }
+        });
+
+        // Consult AI Doctor trigger
+        document.getElementById('btn-consult-ai')?.addEventListener('click', async () => {
+            const vId = state.activeVehicleId;
+            if (!vId) {
+                UI.showToast("Vui lòng chọn hoặc thêm xe máy trước!", "danger");
+                return;
+            }
+            
+            const apiKey = AI.getKey();
+            if (!apiKey) {
+                UI.showToast("Vui lòng cấu hình Gemini API Key trong mục Cài đặt trước!", "warning");
+                // Redirect user to Settings view by triggering click on settings nav tab
+                const settingsTab = document.querySelector('.app-nav .nav-item[data-view="settings"]');
+                if (settingsTab) settingsTab.click();
+                return;
+            }
+
+            this.openModal('ai-doctor');
+            
+            const loadingEl = document.getElementById('ai-loading');
+            const contentEl = document.getElementById('ai-result-content');
+            
+            if (loadingEl && contentEl) {
+                loadingEl.classList.remove('hidden');
+                contentEl.classList.add('hidden');
+                contentEl.innerHTML = '';
+                
+                try {
+                    const prompt = AI.generateConsultationPrompt(vId);
+                    const resultHtml = await AI.callGeminiTextAPI(prompt);
+                    
+                    loadingEl.classList.add('hidden');
+                    contentEl.classList.remove('hidden');
+                    contentEl.innerHTML = resultHtml;
+                } catch (err) {
+                    loadingEl.classList.add('hidden');
+                    contentEl.classList.remove('hidden');
+                    contentEl.innerHTML = `
+                        <div style="color: var(--color-danger); padding: 20px; text-align: center;">
+                            <h4 style="font-weight:600;">⚠️ Lỗi kết nối Gemini AI</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">${err.message || 'Không thể lấy phản hồi từ Gemini API.'}</p>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">Vui lòng kiểm tra lại kết nối mạng và tính hợp lệ của API Key.</p>
+                        </div>
+                    `;
+                }
+            }
+        });
 
         // 5. Form Submissions
         document.getElementById('form-vehicle')?.addEventListener('submit', (e) => {
@@ -419,6 +487,8 @@ const App = {
                 document.getElementById('preset-interval-km').value = data.km;
                 document.getElementById('preset-interval-months').value = data.months;
             }
+        } else if (type === 'ai-doctor') {
+            // Loading and clearing state is handled in click event listener
         }
     },
 

@@ -86,6 +86,19 @@
                     </button>
                 </div>
 
+                <!-- AI Doctor Consultant Card -->
+                <div class="ai-doctor-card card" id="card-ai-advisor">
+                    <div class="ai-doctor-header">
+                        <svg viewBox="0 0 24 24" class="ai-doctor-icon">
+                            <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6h-2v2h2v2h-2v2h-2v-2H9v-2h2V9H9V7h2V5h2v2h2v2z"/>
+                        </svg>
+                        <h4>Bác sĩ xe máy AI</h4>
+                        <span id="gemini-status-dot" class="status-indicator-dot"></span>
+                    </div>
+                    <p class="ai-doctor-desc">Phân tích ODO, độ hao mòn phụ tùng và lịch sử xăng xe để đưa ra đề xuất bảo dưỡng tối ưu nhất từ AI.</p>
+                    <button id="btn-consult-ai" class="btn btn-ai-action">Hỏi ý kiến Bác sĩ AI</button>
+                </div>
+
                 <!-- Maintenance Items Health Grid -->
                 <div class="section-title-wrapper">
                     <h3 class="section-title">Tình trạng hao mòn phụ tùng</h3>
@@ -227,6 +240,20 @@
                     <p class="settings-desc">Tùy chỉnh khoảng cách và thời gian định kỳ cần bảo dưỡng phụ tùng.</p>
                     <div class="presets-settings-list" id="presets-config-list">
                         <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- AI Config -->
+                <div class="card settings-card">
+                    <h3>Trí tuệ nhân tạo (Gemini AI)</h3>
+                    <p class="settings-desc">Cấu hình API Key để kích hoạt tính năng Bác sĩ Xe máy AI chẩn đoán sức khỏe xe.</p>
+                    <div class="form-group">
+                        <label for="settings-gemini-key">Gemini API Key</label>
+                        <div class="input-group">
+                            <input type="password" id="settings-gemini-key" placeholder="Nhập API Key của bạn...">
+                            <button id="btn-save-gemini-key" class="btn btn-primary btn-sm">Lưu</button>
+                        </div>
+                        <small class="form-help">Khoá API sẽ được lưu bảo mật trong bộ nhớ cục bộ thiết bị của bạn.</small>
                     </div>
                 </div>
 
@@ -480,6 +507,39 @@
                         <button type="submit" class="btn btn-primary">Cập nhật định mức</button>
                     </div>
                 </form>
+            </div>
+        </div>
+
+        <!-- MODAL: AI DOCTOR CONSULTATION -->
+        <div id="modal-ai-doctor" class="modal-overlay hidden">
+            <div class="modal-content" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="22" height="22" style="color: var(--color-accent); filter: drop-shadow(0 0 4px rgba(127, 90, 240, 0.4));">
+                            <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6h-2v2h2v2h-2v-2h-2v-2H9v-2h2V9H9V7h2V5h2v2h2v2z"/>
+                        </svg>
+                        Kết quả Chẩn đoán Bác sĩ AI
+                    </h3>
+                    <button class="modal-close" id="btn-close-modal-ai-doctor">&times;</button>
+                </div>
+                
+                <div class="ai-consultation-body">
+                    <!-- Loading state -->
+                    <div id="ai-loading" class="ai-loading-box">
+                        <div class="spinner"></div>
+                        <p>Đang tổng hợp dữ liệu xe và tham khảo ý kiến Bác sĩ AI...</p>
+                        <small>Việc này có thể mất từ 5-10 giây...</small>
+                    </div>
+                    
+                    <!-- Content state -->
+                    <div id="ai-result-content" class="ai-result-content hidden">
+                        <!-- AI analysis response will be rendered here -->
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="btn-close-ai-doctor">Đóng</button>
+                </div>
             </div>
         </div>
 
