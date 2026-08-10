@@ -497,7 +497,7 @@ export const Stats = {
 export const DataPortability = {
     exportData() {
         const backup = {
-            version: '1.0.2',
+            version: '1.0.3',
             timestamp: new Date().toISOString(),
             vehicles: getLocal(KEYS.VEHICLES, []),
             activeId: localStorage.getItem(KEYS.ACTIVE_VEHICLE_ID) || null,
@@ -566,7 +566,7 @@ export const AI = {
         const apiKey = this.getKey();
         if (!apiKey) throw new Error("Chưa cấu hình Gemini API Key.");
 
-        const models = [defaultModel, "gemini-3.5-pro", "gemini-2.5-flash", "gemini-1.5-flash"];
+        const models = [defaultModel, "gemini-1.5-flash", "gemini-1.5-pro"];
         let lastError = null;
 
         for (const model of models) {
