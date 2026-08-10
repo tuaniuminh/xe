@@ -24,3 +24,6 @@ task.md
 
 # Log files
 *.log
+
+# Local scripts
+push.bat
