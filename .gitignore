@@ -1,0 +1,26 @@
+# MotoCare Git Ignore File
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Agent metadata
+.agents/
+.gemini/
+scratch/
+walkthrough.md
+implementation_plan.md
+task.md
+
+# Log files
+*.log
