@@ -12,6 +12,7 @@ const state = {
 const App = {
     init() {
         this.registerServiceWorker();
+        this.initTheme();
         this.initRouting();
         this.initEvents();
         
@@ -29,7 +30,7 @@ const App = {
 
         // Display version
         const versionEl = document.getElementById('app-version-display');
-        if (versionEl) versionEl.innerText = 'v1.0.4'; // Set current version
+        if (versionEl) versionEl.innerText = 'v1.0.5'; // Set current version
 
         this.renderAll();
     },
@@ -496,6 +497,52 @@ const App = {
         const overlay = document.getElementById(`modal-${type}`);
         if (overlay) {
             overlay.classList.add('hidden');
+        }
+    },
+
+    // Theme Management (Compatible with FamiLife)
+    initTheme() {
+        const savedTheme = localStorage.getItem('gift_ledger_theme') || 'dark';
+        this.setTheme(savedTheme);
+
+        document.getElementById('btn-toggle-theme')?.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('gift_ledger_theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            this.setTheme(newTheme);
+        });
+    },
+
+    setTheme(theme) {
+        localStorage.setItem('gift_ledger_theme', theme);
+        const body = document.body;
+        const html = document.documentElement;
+        
+        const sunIcon = document.querySelector('.theme-toggle-btn .sun-icon');
+        const moonIcon = document.querySelector('.theme-toggle-btn .moon-icon');
+
+        if (theme === 'light') {
+            body.classList.add('light-mode');
+            html.classList.add('light-mode');
+            html.style.colorScheme = 'light';
+            
+            sunIcon?.classList.add('hidden');
+            moonIcon?.classList.remove('hidden');
+        } else {
+            body.classList.remove('light-mode');
+            html.classList.remove('light-mode');
+            html.style.colorScheme = 'dark';
+            
+            sunIcon?.classList.remove('hidden');
+            moonIcon?.classList.add('hidden');
+        }
+
+        // Redraw fuel chart grid lines to adjust color for theme!
+        const vId = state.activeVehicleId;
+        if (vId) {
+            setTimeout(() => {
+                const stats = Stats.calculateFuelStats(vId);
+                UI.renderFuelChart(stats.chartData);
+            }, 50);
         }
     },
 
