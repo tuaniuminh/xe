@@ -1207,10 +1207,16 @@ body.light-mode .theme-toggle-btn:hover {
     .app-main {
         padding-top: 30px;
         padding-bottom: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
         width: 100%;
+        max-width: none; /* Chiếm trọn chiều ngang để nhận cuộn chuột khắp màn hình */
+        margin: 0;
         order: 3; /* Nằm dưới nav */
+    }
+    
+    .app-view {
+        max-width: 1200px; /* Giới hạn chiều rộng nội dung bên trong */
+        margin: 0 auto;    /* Căn giữa nội dung */
+        width: 100%;
     }
     
     .modal-overlay {

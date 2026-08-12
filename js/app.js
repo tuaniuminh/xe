@@ -30,7 +30,7 @@ const App = {
 
         // Display version
         const versionEl = document.getElementById('app-version-display');
-        if (versionEl) versionEl.innerText = 'v1.0.9'; // Set current version
+        if (versionEl) versionEl.innerText = 'v1.1.0'; // Set current version
 
         this.renderAll();
     },

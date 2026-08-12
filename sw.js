@@ -1,6 +1,6 @@
 /* MotoCare - Service Worker for Offline PWA Support */
 
-const CACHE_NAME = 'motocare-cache-v1.0.9';
+const CACHE_NAME = 'motocare-cache-v1.1.0';
 
 const ASSETS_TO_CACHE = [
     './',
