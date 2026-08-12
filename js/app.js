@@ -30,9 +30,10 @@ const App = {
 
         // Display version
         const versionEl = document.getElementById('app-version-display');
-        if (versionEl) versionEl.innerText = 'v1.1.0'; // Set current version
+        if (versionEl) versionEl.innerText = 'v1.1.1'; // Set current version
 
-        this.renderAll();
+        // Trigger initial routing based on URL hash
+        this.handleRouting();
     },
 
     // Refresh all views based on active vehicle
@@ -56,29 +57,54 @@ const App = {
     // Single Page App View Routing
     initRouting() {
         const navItems = document.querySelectorAll('.app-nav .nav-item');
-        const views = document.querySelectorAll('.app-main .app-view');
 
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 const targetView = item.getAttribute('data-view');
-                if (!targetView) return;
-
-                // Toggle active menu
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-
-                // Toggle active view screen
-                views.forEach(view => view.classList.remove('active'));
-                const viewEl = document.getElementById(`view-${targetView}`);
-                if (viewEl) {
-                    viewEl.classList.add('active');
-                    state.currentView = targetView;
+                if (targetView) {
+                    window.location.hash = targetView;
                 }
-
-                // Render current view data dynamically
-                this.renderAll();
             });
         });
+
+        // Listen to hash change for SPA routing
+        window.addEventListener('hashchange', () => this.handleRouting());
+    },
+
+    handleRouting() {
+        let hash = window.location.hash.replace('#', '').trim();
+        const validViews = ['dashboard', 'fuel', 'history', 'settings'];
+        
+        if (!validViews.includes(hash)) {
+            hash = 'dashboard';
+            window.location.hash = hash;
+            return;
+        }
+
+        state.currentView = hash;
+
+        // Toggle active menu
+        const navItems = document.querySelectorAll('.app-nav .nav-item');
+        navItems.forEach(nav => {
+            if (nav.getAttribute('data-view') === hash) {
+                nav.classList.add('active');
+            } else {
+                nav.classList.remove('active');
+            }
+        });
+
+        // Toggle active view screen
+        const views = document.querySelectorAll('.app-main .app-view');
+        views.forEach(view => {
+            if (view.id === `view-${hash}`) {
+                view.classList.add('active');
+            } else {
+                view.classList.remove('active');
+            }
+        });
+
+        // Render current view data dynamically
+        this.renderAll();
     },
 
     // Initialize Event Listeners
