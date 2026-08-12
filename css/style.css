@@ -303,7 +303,7 @@ body.light-mode .theme-toggle-btn:hover {
 .input-group {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 4px 8px;
@@ -345,7 +345,7 @@ body.light-mode .theme-toggle-btn:hover {
 
 .btn-primary {
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-end));
-    color: var(--text-dark);
+    color: #ffffff;
     box-shadow: 0 4px 15px var(--color-primary-glow);
 }
 
@@ -359,13 +359,14 @@ body.light-mode .theme-toggle-btn:hover {
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-tertiary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--border-color);
+    border-color: var(--border-hover);
 }
 
 .btn-danger {
@@ -397,14 +398,15 @@ body.light-mode .theme-toggle-btn:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
     padding: 12px;
     cursor: pointer;
     color: var(--text-primary);
     gap: 8px;
     transition: var(--transition-normal);
+    box-shadow: var(--glass-shadow);
 }
 
 .btn-card svg {
@@ -414,7 +416,7 @@ body.light-mode .theme-toggle-btn:hover {
 
 .btn-card:hover {
     border-color: var(--color-primary);
-    background: rgba(0, 242, 254, 0.05);
+    background: var(--color-primary-glow);
     transform: translateY(-3px);
 }
 
@@ -464,8 +466,8 @@ body.light-mode .theme-toggle-btn:hover {
 }
 
 .health-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     border-radius: 16px;
     padding: 15px;
     display: flex;
@@ -473,11 +475,14 @@ body.light-mode .theme-toggle-btn:hover {
     align-items: center;
     text-align: center;
     position: relative;
-    transition: var(--transition-normal);
+    transition: var(--transition-normal), transform var(--transition-normal);
+    box-shadow: var(--glass-shadow);
 }
 
 .health-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 30px var(--color-primary-glow);
+    transform: translateY(-2px);
 }
 
 /* Circular Progress Chart SVG */
@@ -500,7 +505,7 @@ body.light-mode .theme-toggle-btn:hover {
 }
 
 .radial-progress .track {
-    stroke: rgba(255, 255, 255, 0.05);
+    stroke: var(--border-color);
 }
 
 .radial-progress .fill {
@@ -725,7 +730,7 @@ body.light-mode .theme-toggle-btn:hover {
     opacity: 0.15;
 }
 .chart-dot {
-    fill: var(--bg-dark);
+    fill: var(--bg-primary);
     stroke: var(--color-primary);
     stroke-width: 3;
     cursor: pointer;
@@ -966,7 +971,7 @@ body.light-mode .theme-toggle-btn:hover {
 }
 
 .modal-content {
-    background: var(--bg-dark);
+    background: var(--bg-secondary);
     border-top: 2px solid var(--color-primary);
     border-radius: 20px 20px 0 0;
     width: 100%;
@@ -1041,7 +1046,7 @@ body.light-mode .theme-toggle-btn:hover {
 .form-group input[type="date"],
 .form-group select,
 .form-group textarea {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--text-primary);
@@ -1150,7 +1155,7 @@ body.light-mode .theme-toggle-btn:hover {
         position: static;
         width: 100%;
         height: 65px;
-        background: rgba(13, 14, 18, 0.8);
+        background: var(--bg-secondary);
         border-bottom: 1px solid var(--border-color);
         order: 1; /* Ở trên cùng */
         padding: 15px 40px;
@@ -1166,7 +1171,7 @@ body.light-mode .theme-toggle-btn:hover {
         padding: 0 40px;
         justify-content: flex-start;
         gap: 15px;
-        background: rgba(22, 25, 35, 0.5);
+        background: var(--bg-secondary);
         order: 2; /* Nằm giữa header và main */
     }
     
