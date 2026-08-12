@@ -1,6 +1,6 @@
 /* MotoCare - Service Worker for Offline PWA Support */
 
-const CACHE_NAME = 'motocare-cache-v1.0.5';
+const CACHE_NAME = 'motocare-cache-v1.0.6';
 
 const ASSETS_TO_CACHE = [
     './',
@@ -10,8 +10,7 @@ const ASSETS_TO_CACHE = [
     './js/presets.js',
     './js/db.js',
     './js/ui.js',
-    './js/app.js',
-    'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap'
+    './js/app.js'
 ];
 
 // Install Event - Pre-cache static assets
@@ -20,7 +19,6 @@ self.addEventListener('install', event => {
         caches.open(CACHE_NAME)
             .then(cache => {
                 console.log('[Service Worker] Caching static shell');
-                // Use addAll, and swallow failures for external assets if offline
                 return cache.addAll(ASSETS_TO_CACHE);
             })
             .then(() => self.skipWaiting())
@@ -43,44 +41,69 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch Event - Serve from cache, fallback to network
+// Fetch Event - Network first for local resources, Cache first for images and CDNs
 self.addEventListener('fetch', event => {
-    // Skip non-GET requests (like POST submissions)
+    // Skip non-GET requests
     if (event.request.method !== 'GET') return;
 
-    event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                if (cachedResponse) {
-                    // Return cached response immediately
-                    return cachedResponse;
-                }
+    let url;
+    try {
+        url = new URL(event.request.url);
+    } catch {
+        return;
+    }
 
-                // If not in cache, fetch from network
-                return fetch(event.request)
-                    .then(networkResponse => {
-                        // Check if we received a valid response
-                        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                            return networkResponse;
-                        }
+    // Bypass external APIs
+    const BYPASS_DOMAINS = ['generativelanguage.googleapis.com'];
+    if (BYPASS_DOMAINS.some(domain => url.hostname.includes(domain))) return;
 
-                        // Clone the response because it can only be read once
-                        const responseToCache = networkResponse.clone();
+    // Bypass non-http
+    if (!url.protocol.startsWith('http')) return;
 
-                        // Cache dynamically fetched files (like google fonts, dynamic icons)
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                cache.put(event.request, responseToCache);
-                            });
+    const isImage = /\.(png|jpg|jpeg|svg|ico|webp|gif)(\?.*)?$/i.test(url.pathname);
+    const isCDN = ['cdn.jsdelivr.net', 'unpkg.com', 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'fonts.gstatic.com'].some(domain => url.hostname.includes(domain));
 
-                        return networkResponse;
-                    })
-                    .catch(() => {
-                        // Offline fallback for html requests
-                        if (event.request.headers.get('accept').includes('text/html')) {
+    if (isImage || isCDN) {
+        // Cache-first for assets and CDNs
+        event.respondWith(
+            caches.match(event.request).then(cached => {
+                if (cached) return cached;
+                return fetch(event.request).then(response => {
+                    if (response && response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+                    }
+                    return response;
+                }).catch(() => cached);
+            })
+        );
+    } else {
+        // Network-first with cache fallback for local HTML/JS/CSS (always get latest code)
+        let fetchPromise;
+        try {
+            // Bypass browser disk cache to force fetch from server
+            fetchPromise = fetch(event.request, { cache: 'no-cache' });
+        } catch (e) {
+            fetchPromise = fetch(event.request);
+        }
+
+        event.respondWith(
+            fetchPromise
+                .then(response => {
+                    if (response && response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+                    }
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match(event.request).then(cached => {
+                        if (cached) return cached;
+                        if (url.pathname.endsWith('/') || !url.pathname.includes('.')) {
                             return caches.match('./index.html');
                         }
                     });
-            })
-    );
+                })
+        );
+    }
 });
