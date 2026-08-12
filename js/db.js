@@ -497,7 +497,7 @@ export const Stats = {
 export const DataPortability = {
     exportData() {
         const backup = {
-            version: '1.0.8',
+            version: '1.0.9',
             timestamp: new Date().toISOString(),
             vehicles: getLocal(KEYS.VEHICLES, []),
             activeId: localStorage.getItem(KEYS.ACTIVE_VEHICLE_ID) || null,

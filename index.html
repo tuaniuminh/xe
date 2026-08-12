@@ -123,19 +123,7 @@
                 </div>
             </section>
 
-            <!-- 2. VEHICLES VIEW -->
-            <section id="view-vehicles" class="app-view">
-                <div class="section-header">
-                    <h2>Nhà xe của bạn</h2>
-                    <button class="btn btn-primary" id="btn-add-vehicle">
-                        + Thêm xe mới
-                    </button>
-                </div>
-                
-                <div id="vehicles-list-container" class="vehicles-list">
-                    <!-- Dynamic List -->
-                </div>
-            </section>
+
 
             <!-- 3. FUEL TRACKER VIEW -->
             <section id="view-fuel" class="app-view">
@@ -243,7 +231,21 @@
 
             <!-- 5. SETTINGS VIEW -->
             <section id="view-settings" class="app-view">
-                <h2>Cài đặt ứng dụng</h2>
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h2>Cài đặt ứng dụng</h2>
+                    <button class="btn btn-primary" id="btn-add-vehicle">
+                        + Thêm xe mới
+                    </button>
+                </div>
+
+                <!-- Garage Management (Nhà xe của bạn) -->
+                <div class="card settings-card">
+                    <h3>Nhà xe của bạn</h3>
+                    <p class="settings-desc">Danh sách xe máy đang theo dõi. Bạn có thể thêm, sửa đổi hoặc xóa xe máy.</p>
+                    <div id="vehicles-list-container" class="vehicles-list" style="margin-top: 15px;">
+                        <!-- Dynamic List -->
+                    </div>
+                </div>
 
                 <!-- Presets Settings -->
                 <div class="card settings-card">
@@ -316,12 +318,7 @@
                 </svg>
                 <span>Tổng quan</span>
             </button>
-            <button class="nav-item" data-view="vehicles">
-                <svg viewBox="0 0 24 24" class="nav-icon">
-                    <path fill="currentColor" d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.27-3.82c.07-.22.28-.38.52-.38h10.42c.24 0 .45.16.52.38L19 11H5z"/>
-                </svg>
-                <span>Nhà xe</span>
-            </button>
+
             <button class="nav-item" data-view="fuel">
                 <svg viewBox="0 0 24 24" class="nav-icon">
                     <path fill="currentColor" d="M19.02 10v9.02c0 .54-.44.98-.98.98H6c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h5.18c.27 0 .52.1.71.29l2.83 2.83c.18.18.28.43.28.7v2.18h4.02zM12 7.5L8.5 11H11v4h2v-4h2.5L12 7.5z"/>
