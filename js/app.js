@@ -30,7 +30,7 @@ const App = {
 
         // Display version
         const versionEl = document.getElementById('app-version-display');
-        if (versionEl) versionEl.innerText = 'v1.0.7'; // Set current version
+        if (versionEl) versionEl.innerText = 'v1.0.8'; // Set current version
 
         this.renderAll();
     },
@@ -502,11 +502,11 @@ const App = {
 
     // Theme Management (Compatible with FamiLife)
     initTheme() {
-        const savedTheme = localStorage.getItem('gift_ledger_theme') || 'dark';
+        const savedTheme = localStorage.getItem('gift_ledger_theme') || 'light';
         this.setTheme(savedTheme);
 
         document.getElementById('btn-toggle-theme')?.addEventListener('click', () => {
-            const currentTheme = localStorage.getItem('gift_ledger_theme') || 'dark';
+            const currentTheme = localStorage.getItem('gift_ledger_theme') || 'light';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             this.setTheme(newTheme);
         });

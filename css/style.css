@@ -48,6 +48,10 @@
     --font-heading: 'Be Vietnam Pro', 'Outfit', 'Inter', sans-serif;
     --font-body: 'Be Vietnam Pro', 'Inter', sans-serif;
     --font-family: var(--font-body);
+
+    /* Welcome & Danger Card backgrounds */
+    --welcome-bg: linear-gradient(135deg, rgba(22, 25, 35, 0.9), rgba(15, 32, 67, 0.4));
+    --danger-zone-bg: linear-gradient(180deg, rgba(22, 25, 35, 0.7), rgba(255, 94, 126, 0.05));
 }
 
 /* Light Mode Variables Override */
@@ -68,6 +72,9 @@ html.light-mode, body.light-mode {
     --glass-bg: rgba(255, 255, 255, 0.85);
     --glass-border: rgba(0, 0, 0, 0.05);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    
+    --welcome-bg: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(29, 78, 216, 0.03));
+    --danger-zone-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(225, 29, 72, 0.03));
     
     --color-primary: #0284c7;
     --color-primary-end: #1d4ed8;
@@ -275,7 +282,7 @@ body.light-mode .theme-toggle-btn:hover {
 
 /* Welcome & ODO Card */
 .welcome-card {
-    background: linear-gradient(135deg, rgba(22, 25, 35, 0.9), rgba(15, 32, 67, 0.4));
+    background: var(--welcome-bg);
     border-left: 4px solid var(--color-primary);
 }
 
@@ -882,7 +889,7 @@ body.light-mode .theme-toggle-btn:hover {
 
 .danger-zone {
     border-color: rgba(255, 94, 126, 0.3);
-    background: linear-gradient(180deg, rgba(22, 25, 35, 0.7), rgba(255, 94, 126, 0.05));
+    background: var(--danger-zone-bg);
 }
 
 .app-info-footer {
@@ -908,12 +915,13 @@ body.light-mode .theme-toggle-btn:hover {
     left: 0;
     right: 0;
     height: 65px;
-    background: rgba(22, 25, 35, 0.95);
+    background: var(--bg-secondary);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--border-color);
     z-index: 10;
     padding-bottom: env(safe-area-inset-bottom);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .nav-item {
@@ -1111,9 +1119,9 @@ body.light-mode .theme-toggle-btn:hover {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(22, 25, 35, 0.9);
-    border: 1px solid var(--color-primary);
-    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.2);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 12px 24px;
     z-index: 100;
@@ -1233,7 +1241,7 @@ body.light-mode .theme-toggle-btn:hover {
 
 /* AI Doctor Styles */
 .ai-doctor-card {
-    background: linear-gradient(135deg, rgba(127, 90, 240, 0.15), rgba(22, 25, 35, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(127, 90, 240, 0.15), var(--bg-secondary)) !important;
     border: 1px solid rgba(127, 90, 240, 0.3) !important;
     position: relative;
     overflow: hidden;
